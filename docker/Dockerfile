@@ -77,7 +77,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # can be useful for both `dev` and `test`
 # explicitly set the list to avoid issues with torch 2.2
 # see https://github.com/pytorch/pytorch/pull/123243
-ARG torch_cuda_arch_list='7.0 7.5 8.0 8.9 9.0 10.0+PTX'
+ARG torch_cuda_arch_list='7.0 7.5 8.0 8.9 9.0 10.0+PTX 10.1 12.0 12.1'
 ENV TORCH_CUDA_ARCH_LIST=${torch_cuda_arch_list}
 # Override the arch list for flash-attn to reduce the binary size
 ARG vllm_fa_cmake_gpu_arches='80-real;90-real'
@@ -305,7 +305,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv pip install --system --no-build-isolation "git+https://github.com/state-spaces/mamba@v2.2.4"
 
 # install development dependencies (for testing)
-RUN --mount=type=cache,target=/root/.cache/uv \   
+RUN --mount=type=cache,target=/root/.cache/uv \
     CUDA_MAJOR="${CUDA_VERSION%%.*}"; \
     if [ "$CUDA_MAJOR" -ge 12 ]; then \
         uv pip install --system -r requirements/dev.txt; \
